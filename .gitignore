@@ -5,4 +5,4 @@ lib
 .*
 !/.gitignore
 env
-examples/credentials
+examples/credentials.js
