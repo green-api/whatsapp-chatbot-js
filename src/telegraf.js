@@ -1,5 +1,6 @@
 const debug = require('debug')('telegraf:core')
 const Telegram = require('./telegram')
+const GreenApiV0 = require('./green-api-v0')
 const Extra = require('./extra')
 const Composer = require('./composer')
 const Markup = require('./markup')
@@ -15,7 +16,8 @@ const { URL } = require('url')
 const DEFAULT_OPTIONS = {
   retryAfter: 1,
   handlerTimeout: 0,
-  contextType: Context
+  contextType: Context,
+  apiType: GreenApiV0
 }
 
 const noop = () => { }
@@ -42,7 +44,8 @@ class Telegraf extends Composer {
   }
 
   set token (token) {
-    this.telegram = new Telegram(token, this.telegram
+    const ApiClient = this.options.apiType
+    this.telegram = new ApiClient(token, this.telegram
       ? this.telegram.options
       : this.options.telegram
     )
@@ -164,7 +167,8 @@ class Telegraf extends Composer {
 
   handleUpdate (update, webhookResponse) {
     debug('Processing update', update.update_id)
-    const tg = new Telegram(this.token, this.telegram.options, webhookResponse)
+    const ApiClient = this.options.apiType
+    const tg = new ApiClient(this.token, this.telegram.options, webhookResponse)
     const TelegrafContext = this.options.contextType
     const ctx = new TelegrafContext(update, tg, this.options)
     Object.assign(ctx, this.context)

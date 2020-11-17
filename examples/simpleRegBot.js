@@ -6,9 +6,10 @@ const data = require('./credentials')
 
 const stage = new Stage()
 const bot = new Telegraf({
-  idInstance: data.idInstance,
-  apiTokenInstance: data.apiTokenInstance
-})
+    idInstance: data.idInstance,
+    apiTokenInstance: data.apiTokenInstance,
+  }
+)
 
 const getName = new Scene('getName')
 stage.register(getName)

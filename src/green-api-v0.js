@@ -1,9 +1,31 @@
 const replicators = require('./core/replicators')
 const ApiClient = require('./core/network/client')
+const whatsAppClient = require('@green-api/whatsapp-api-client')
 
-class Telegram extends ApiClient {
-  getMe () {
-    return this.callApi('getMe')
+class GreenApiV0 extends ApiClient {
+
+  constructor(token, options, webhookResponse) {
+    super(token, options, webhookResponse)
+
+    this.restAPI = whatsAppClient.restAPI({
+      idInstance: token.idInstance,
+      apiTokenInstance: token.apiTokenInstance,
+    })
+  }
+  
+  async getMe () {
+    return new Promise((resolve) => { 
+      resolve({
+        is_bot: true,
+        username: 'whatsapp',
+        /** true, if the bot can be invited to groups. Returned only in getMe. */
+        can_join_groups: true,
+        /** true, if privacy mode is disabled for the bot. Returned only in getMe. */
+        can_read_all_group_messages: true,
+        /** true, if the bot supports inline queries. Returned only in getMe. */
+        supports_inline_queries: true,
+      })
+    })
   }
 
   getFile (fileId) {
@@ -22,11 +44,49 @@ class Telegram extends ApiClient {
       .then((file) => `${this.options.apiRoot}/file/bot${this.token}/${file.file_path}`)
   }
 
-  getUpdates (timeout, limit, offset, allowedUpdates) {
-    const url = `getUpdates?offset=${offset}&limit=${limit}&timeout=${timeout}`
-    return this.callApi(url, {
-      allowed_updates: allowedUpdates
-    })
+  async getUpdates (timeout, limit, offset, allowedUpdates) {
+
+    this.noty = await this.restAPI.webhookService.receiveNotification()
+    if (!this.noty) {
+      return []
+    }
+    await this.deleteWebhook();
+
+    const incomingMessageReceived = this.noty.body
+    const text = (incomingMessageReceived.messageData.typeMessage == 'textMessage' ? incomingMessageReceived.messageData.textMessageData.textMessage : '')
+        || (incomingMessageReceived.messageData.typeMessage == 'quotedMessage' ? incomingMessageReceived.messageData.extendedTextMessageData.text : '')
+        || (incomingMessageReceived.messageData.typeMessage == 'extendedTextMessage' ? incomingMessageReceived.messageData.extendedTextMessageData.text : '')
+
+    
+    const messageUpdate = {
+      update_id: 1111,
+      message: {
+          text: text,
+          chat: {
+              id: incomingMessageReceived.senderData.chatId,
+              type: 'channel',
+          },
+          from: {
+              first_name: incomingMessageReceived.senderData.senderName,
+              last_name: '',
+              id: 0,
+              is_bot: false,
+          },
+          message_id: incomingMessageReceived.idMessage,
+          date: incomingMessageReceived.timestamp,
+          caption_entities: [
+              {
+                  type: 'bot_command',
+                  offset: 0,
+                  length: text.length,
+              }
+          ]
+      }
+    }
+
+    return [
+        messageUpdate
+    ]
   }
 
   getWebhookInfo () {
@@ -63,12 +123,21 @@ class Telegram extends ApiClient {
     })
   }
 
-  deleteWebhook () {
-    return this.callApi('deleteWebhook')
+  async deleteWebhook () {
+    if (this.noty && this.noty.receiptId) {
+      return this.restAPI.webhookService.deleteNotification(this.noty.receiptId);
+    }
   }
 
   sendMessage (chatId, text, extra) {
-    return this.callApi('sendMessage', { chat_id: chatId, text, ...extra })
+
+    if (extra && extra.reply_markup && extra.reply_markup.keyboard) {
+      const {reply_markup : { keyboard }} = extra
+      keyboard[0].forEach(key => {
+        text = text ? text + '\n' + key : key
+      })
+    }
+    return this.restAPI.message.sendMessage(chatId, null, text)
   }
 
   forwardMessage (chatId, fromChatId, messageId, extra) {
@@ -430,4 +499,4 @@ class Telegram extends ApiClient {
   }
 }
 
-module.exports = Telegram
+module.exports = GreenApiV0
