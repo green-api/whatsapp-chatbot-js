@@ -4,7 +4,7 @@
     "email": "support@green-api.com"
   },
   "bugs": {
-    "url": "https://github.com/telegraf/telegraf/issues"
+    "url": "https://github.com/whatsappbot/whatsappbot/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
@@ -17,7 +17,7 @@
     "telegram-typings": "^3.6.0"
   },
   "deprecated": false,
-  "description": "Whatatsapp bot library based on Telegraf",
+  "description": "Whatatsapp bot library based on WhatsAppBot",
   "devDependencies": {
     "@types/node": "^13.1.0",
     "ava": "^3.0.0",
@@ -42,7 +42,7 @@
     "typings/*.d.ts",
     "*.js"
   ],
-  "homepage": "https://github.com/telegraf/telegraf#readme",
+  "homepage": "https://github.com/whatsappbot/whatsappbot#readme",
   "keywords": [
     "whatsapp",
     "whatsapp bot api",
@@ -51,11 +51,11 @@
     "bot framework"
   ],
   "license": "MIT",
-  "main": "telegraf.js",
-  "name": "telegraf",
+  "main": "whatsappbot.js",
+  "name": "whatsappbot",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/telegraf/telegraf.git"
+    "url": "git+ssh://git@github.com/whatsappbot/whatsappbot.git"
   },
   "scripts": {},
   "type": "commonjs",

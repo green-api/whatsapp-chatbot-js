@@ -1,4 +1,4 @@
-const debug = require('debug')('telegraf:core')
+const debug = require('debug')('whatsappbot:core')
 const Telegram = require('./telegram')
 const GreenApiV0 = require('./green-api-v0')
 const Extra = require('./extra')
@@ -22,7 +22,7 @@ const DEFAULT_OPTIONS = {
 
 const noop = () => { }
 
-class Telegraf extends Composer {
+class WhatsAppBot extends Composer {
   constructor (token,  options) {
     super()
     this.options = {
@@ -120,7 +120,7 @@ class Telegraf extends Composer {
         if (domain.startsWith('https://') || domain.startsWith('http://')) {
           domain = new URL(domain).host
         }
-        const hookPath = config.webhook.hookPath || `/telegraf/${crypto.randomBytes(32).toString('hex')}`
+        const hookPath = config.webhook.hookPath || `/whatsappbot/${crypto.randomBytes(32).toString('hex')}`
         const { port, host, tlsOptions, cb } = config.webhook
         this.startWebhook(hookPath, tlsOptions, port, host, cb)
         if (!domain) {
@@ -210,14 +210,14 @@ class Telegraf extends Composer {
   }
 }
 
-module.exports = Object.assign(Telegraf, {
+module.exports = Object.assign(WhatsAppBot, {
   Context,
   Composer,
-  default: Telegraf,
+  default: WhatsAppBot,
   Extra,
   Markup,
   Router,
-  Telegraf,
+  WhatsAppBot,
   Telegram,
   Stage,
   BaseScene,

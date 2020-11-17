@@ -38,7 +38,7 @@ export declare class TelegrafContext {
    * @param ownerId User identifier of sticker set owner
    * @param name Sticker set name
    * @param stickerData Sticker object
-   * @param isMasks https://github.com/telegraf/telegraf/blob/87882c42f6c2496576fdb57ca622690205c3e35e/lib/telegram.js#L304
+   * @param isMasks https://github.com/whatsappbot/whatsappbot/blob/87882c42f6c2496576fdb57ca622690205c3e35e/lib/telegram.js#L304
    * @returns Returns True on success.
    */
   addStickerToSet(

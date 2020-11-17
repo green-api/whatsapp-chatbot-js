@@ -169,7 +169,7 @@ class TelegrafContext {
 
   assert (value, method) {
     if (!value) {
-      throw new Error(`Telegraf: "${method}" isn't available for "${this.updateType}::${this.updateSubTypes}"`)
+      throw new Error(`WhatsAppBot: "${method}" isn't available for "${this.updateType}::${this.updateSubTypes}"`)
     }
   }
 

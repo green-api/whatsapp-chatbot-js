@@ -7,7 +7,7 @@ import * as https from 'https'
 import * as http from 'http'
 import { TlsOptions } from 'tls'
 
-import * as tt from './telegram-types.d'
+import * as tt from './telegram-types'
 
 import { TelegrafContext } from './context'
 import { Composer } from './composer'
@@ -79,7 +79,7 @@ export interface LaunchWebhookOptions {
   cb?: (req: IncomingMessage, res: ServerResponse) => void
 }
 
-export declare class Telegraf<
+export declare class WhatsAppBot<
   TContext extends TelegrafContext
 > extends Composer<TContext> {
   /**
@@ -103,23 +103,23 @@ export declare class Telegraf<
   context: TContext
 
   /**
-   * Telegraf options
+   * WhatsAppBot options
    */
   options: TOptions
 
   /**
-   * Initialize new Telegraf app.
+   * Initialize new WhatsAppBot app.
    * @param token Bot token
    * @param options options
    * @example
-   * new Telegraf(token, options)
+   * new WhatsAppBot(token, options)
    */
   constructor(token: string, options?: TelegrafOptions)
 
   /**
    * Launch bot in long-polling or webhook mode.
    *
-   * @param options [See reference to get more]{@link https://telegraf.js.org/#/?id=launch}
+   * @param options [See reference to get more]{@link https://whatsappbot.js.org/#/?id=launch}
    */
   launch(options?: {
     polling?: LaunchPollingOptions
@@ -138,11 +138,11 @@ export declare class Telegraf<
     limit?: number,
     allowedUpdates?: tt.UpdateType[] | tt.UpdateType | null,
     stopCallback?: () => void | null
-  ): Telegraf<TContext>
+  ): WhatsAppBot<TContext>
 
   /**
    * Start listening @ https://host:port/hookPath for Telegram calls.
-   * @param hookPath Webhook url path (see Telegraf.setWebhook)
+   * @param hookPath Webhook url path (see WhatsAppBot.setWebhook)
    * @param tlsOptions TLS server options. Pass null to use http
    * @param port Port number
    * @param host Hostname
@@ -154,7 +154,7 @@ export declare class Telegraf<
     port?: number,
     host?: string,
     cb?: (req: IncomingMessage, res: ServerResponse) => void
-  ): Telegraf<TContext>
+  ): WhatsAppBot<TContext>
 
   /**
    * Stop Webhook and polling
@@ -163,8 +163,8 @@ export declare class Telegraf<
 
   /**
    * Return a callback function suitable for the http[s].createServer() method to handle a request.
-   * You may also use this callback function to mount your telegraf app in a Koa/Connect/Express app.
-   * @param hookPath Webhook url path (see Telegraf.setWebhook)
+   * You may also use this callback function to mount your whatsappbot app in a Koa/Connect/Express app.
+   * @param hookPath Webhook url path (see WhatsAppBot.setWebhook)
    */
   webhookCallback(
     hookPath: string
