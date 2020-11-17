@@ -130,6 +130,13 @@ class Telegram extends ApiClient {
   }
 
   sendMessage (chatId, text, extra) {
+
+    if (extra && extra.reply_markup && extra.reply_markup.keyboard) {
+      const {reply_markup : { keyboard }} = extra
+      keyboard[0].forEach(key => {
+        text = text ? text + '\n' + key : key
+      })
+    }
     return this.restAPI.message.sendMessage(chatId, null, text)
   }
 
