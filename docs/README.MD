@@ -16,7 +16,7 @@ Initialize new WhatsAppBot bot.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| token | `object` | Object containg idInstance and apiTokenInstance properties, You can get it on [Green api](https://cabinet.green-api.com/) |
+| token | `object` | Object containg idInstance and apiTokenInstance properties, You can get it on [Green api](https://green-api.com/) |
 | [options] | `object` | WhatsApp options. |
 
 WhatsApp options:

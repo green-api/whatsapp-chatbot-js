@@ -4,7 +4,7 @@
     "email": "support@green-api.com"
   },
   "bugs": {
-    "url": "https://github.com/whatsappbot/whatsappbot/issues"
+    "url": "https://github.com/green-api/whatsapp-bot/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
@@ -48,7 +48,8 @@
     "whatsapp bot api",
     "bot",
     "botapi",
-    "bot framework"
+    "bot framework",
+    "whatsapp api"
   ],
   "license": "MIT",
   "main": "src/whatsappbot.js",
