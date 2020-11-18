@@ -3,6 +3,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/green-api/whatsapp-bot.svg)](https://github.com/green-api/whatsapp-bot/releases)
 [![npm version](https://badge.fury.io/js/%40green-api%2Fwhatsapp-bot.svg)](https://www.npmjs.com/package/@green-api/whatsapp-bot)
 
+
 ## Introduction
 
 The WhatsApp chat bot designed for writing own chat bots. Users can interact with bots by sending them command messages in private or group chats.
