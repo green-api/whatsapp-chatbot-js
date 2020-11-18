@@ -46,7 +46,7 @@ const bot = new WhatsAppBot({
 A WhatsApp bot was inpired by telegram bot framework - [Telegraf](https://telegraf.js.org). But the WhatsApp bot library inherited limited part of Telegraf API. At this moment whatsapp bot can send and receive text, interact with user by telegraf scenes and use sessions. The bot supports only long-polling mode. To understand basics have look at examples below.
 
 ### Examples
-Hello world example responds with a plain text phrase to any user's print:
+Hello world example responds with a plain text phrase to any users print:
 
 ```js
 const WhatsAppBot = require('@green-api/whatsapp-bot')
@@ -58,7 +58,7 @@ const bot = new WhatsAppBot({
 bot.on('message', (ctx) => ctx.reply('Hello world!'))
 bot.launch()
 ```
-Bot listen to user's command beginning with the / symbol
+Bot listens for users command beginning with the / symbol
 ```js
 const WhatsAppBot = require('@green-api/whatsapp-bot')
 
