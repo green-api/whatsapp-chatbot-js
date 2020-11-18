@@ -2,7 +2,7 @@
 
 ## WhatsAppBot
 
-Telegraf API reference
+WhatsApp Bot API reference
 
 ```js
 const WhatsAppBot = require('@green-api/whatsapp-bot')
