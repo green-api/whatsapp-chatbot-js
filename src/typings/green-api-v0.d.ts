@@ -5,6 +5,11 @@ import * as tt from './telegram-types.d'
 import * as https from 'https'
 import * as http from 'http'
 
+export interface V0_Options {
+  idInstance: string,
+  apiTokenInstance: string
+}
+
 export interface TelegramOptions {
   /**
    * https.Agent or http.Agent instance, allows custom proxy, certificate, keep alive, etc.
@@ -23,7 +28,7 @@ export interface TelegramOptions {
 }
 
 declare class ApiClient {
-  protected constructor(token: string, options: object, webhookResponse: any)
+  protected constructor(token: V0_Options, options: object, webhookResponse: any)
 
   callApi(method: string, data: object): Promise<unknown>
 }
@@ -31,10 +36,10 @@ declare class ApiClient {
 export declare class GreenApiV0 extends ApiClient {
   /**
    * Initialize new GreenApiV0 app.
-   * @param token Bot token
+   * @param token Object containg idInstance and apiTokenInstance properties. You can get it on green-api.com
    * @param options GreenApiV0 options
    */
-  constructor(token: string, options?: TelegramOptions)
+  constructor(token: V0_Options, options?: TelegramOptions)
 
   /**
    * Use this property to control reply via webhook feature.

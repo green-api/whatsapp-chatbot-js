@@ -12,6 +12,7 @@ import * as tt from './telegram-types'
 import { TelegrafContext } from './context'
 import { Composer } from './composer'
 import { Telegram, TelegramOptions } from './telegram'
+import {V0_Options} from './green-api-v0'
 
 export interface TelegrafOptions {
   /**
@@ -109,12 +110,12 @@ export declare class WhatsAppBot<
 
   /**
    * Initialize new WhatsAppBot app.
-   * @param token Bot token
+   * @param token Credentials data. You can get it on green-api.com
    * @param options options
    * @example
    * new WhatsAppBot(token, options)
    */
-  constructor(token: string, options?: TelegrafOptions)
+  constructor(token: V0_Options, options?: TelegrafOptions)
 
   /**
    * Launch bot in long-polling or webhook mode.
