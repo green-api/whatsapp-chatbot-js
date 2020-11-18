@@ -1,4 +1,4 @@
-const debug = require('debug')('whatsappbot:client')
+const debug = require('debug')('@green-api/whatsapp-bot:client')
 const crypto = require('crypto')
 const fetch = require('node-fetch').default
 const fs = require('fs')

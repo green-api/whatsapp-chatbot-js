@@ -1,13 +1,13 @@
-const WhatsAppBot = require('../src/whatsappbot')
-const session = require('../src/session')
-const Stage = require('../src/stage')
-const Scene = require( '../src/scenes/base')
-const data = require('./credentials')
+const WhatsAppBot = require('@green-api/whatsapp-bot')
 
+const session = WhatsAppBot.session
+const Stage = WhatsAppBot.Stage
+const Scene = WhatsAppBot.BaseScene
 const stage = new Stage()
+
 const bot = new WhatsAppBot({
-  idInstance: data.idInstance,
-  apiTokenInstance: data.apiTokenInstance,
+  idInstance: process.env.ID_INSTANCE,
+  apiTokenInstance: process.env.API_TOKEN_INSTANCE
 })
 
 const getName = new Scene('getName')
@@ -34,7 +34,7 @@ bot.start((ctx) => {
   ctx.scene.enter('getName')
 })
 
-bot.hears(/w*/, (ctx) => {
+bot.on('message', (ctx) => {
   ctx.reply('Write your first and last name')
   ctx.scene.enter('getName')
 })

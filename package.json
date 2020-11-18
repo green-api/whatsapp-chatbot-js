@@ -17,7 +17,7 @@
     "telegram-typings": "^3.6.0"
   },
   "deprecated": false,
-  "description": "Whatatsapp bot library based on WhatsAppBot",
+  "description": "Whatatsapp bot library based on Telegraf",
   "devDependencies": {
     "@types/node": "^13.1.0",
     "ava": "^3.0.0",
@@ -42,7 +42,7 @@
     "typings/*.d.ts",
     "*.js"
   ],
-  "homepage": "https://github.com/whatsappbot/whatsappbot#readme",
+  "homepage": "https://github.com/green-api/whatsapp-bot#readme",
   "keywords": [
     "whatsapp",
     "whatsapp bot api",
@@ -51,13 +51,16 @@
     "bot framework"
   ],
   "license": "MIT",
-  "main": "whatsappbot.js",
-  "name": "whatsappbot",
+  "main": "src/whatsappbot.js",
+  "name": "@green-api/whatsapp-bot",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/whatsappbot/whatsappbot.git"
+    "url": "git+ssh://github.com/green-api/whatsapp-bot.git"
   },
-  "scripts": {},
+  "scripts": {
+    "link": "npm link",
+    "install": "npm link @green-api/whatsapp-bot"
+  },
   "type": "commonjs",
   "types": "./typings/index.d.ts",
   "version": "3.38.0"
