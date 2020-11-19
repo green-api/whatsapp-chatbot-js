@@ -17,7 +17,7 @@
     "telegram-typings": "^3.6.0"
   },
   "deprecated": false,
-  "description": "Whatatsapp bot library based on Telegraf",
+  "description": "WhatsApp Bot for NodeJs",
   "devDependencies": {
     "@types/node": "^13.1.0",
     "ava": "^3.0.0",
