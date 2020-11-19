@@ -59,10 +59,8 @@
     "url": "git+ssh://github.com/green-api/whatsapp-bot.git"
   },
   "scripts": {
-    "link": "npm link",
-    "install": "npm link @green-api/whatsapp-bot"
   },
   "type": "commonjs",
   "types": "./src/typings/index.d.ts",
-  "version": "0.1.2"
+  "version": "0.1.3"
 }
