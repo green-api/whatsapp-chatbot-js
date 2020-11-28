@@ -5,10 +5,7 @@ const Stage = WhatsAppBot.Stage
 const Scene = WhatsAppBot.BaseScene
 const stage = new Stage()
 
-const bot = new WhatsAppBot({
-  idInstance: process.env.ID_INSTANCE,
-  apiTokenInstance: process.env.API_TOKEN_INSTANCE
-})
+const bot = new WhatsAppBot(process.env.TOKEN_V1, {apiType: WhatsAppBot.GreenApiV1})
 
 const getName = new Scene('getName')
 stage.register(getName)
@@ -147,7 +144,7 @@ getNumber.hears(['1', '1. Send contact'], async (ctx) => {
   ctx.reply(
     '❗️Revise your info and print keyboard for "Correct" key: ' + 
     `\n\nName: ${ctx.session.name};\nBirth year: ${ctx.session.year};\nEducation: ${ctx.session.educ};` + 
-    `\nНомер: ${ctx.session.phone}`,
+    `\nPhone: ${ctx.session.phone}`,
     { reply_markup: { keyboard: [['️1 - ✅Correct'], ['2 - ◀️Back', '3 - ❌Delete all']]}}
   )
   await ctx.scene.leave('getNumber')
@@ -156,7 +153,7 @@ getNumber.hears(['1', '1. Send contact'], async (ctx) => {
 
 
 check.hears(['1', '1 Correct'], (ctx) => {
-  ctx.reply('✅ Thanks! Your data has been accepted. We will call you.', { reply_markup: { keyboard: [['️1 - ⬅️Back o start']] } }
+  ctx.reply('✅ Thanks! Your data has been accepted. We will call you.', { reply_markup: { keyboard: [['️1 - ⬅️Back to start']] } }
   )
   ctx.scene.leave('main')
 

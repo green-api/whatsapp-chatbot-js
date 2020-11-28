@@ -6,7 +6,9 @@
 
 ## Introduction
 
-The WhatsApp chat bot designed for writing own chat bots. Users can interact with bots by sending them command messages in private or group chats.
+The WhatsApp chat bot designed for writing own chat bots. Users can interact with bots by sending them command messages in private or group chats. The bot uses Green-API ([green-api.com](https://green-api.com)) provider WhatsApp API protocol under hood to support WhatsApp. Green API whatsApp protocol exists in two versions: 
+* V0 - requires plugged and active phone. The protocol provides reach WhatsApp API including messages, media, phone state, location etc. Have look at  [whatsapp-api-client](https://github.com/green-api/whatsapp-api-client) wrapper REST protocol library for more information
+- V1  - phone-free protocol that requires only phone number without physical device. The protocol implements only limited part of WhatsApp API. See details here [v1-whatsapp-api-client](https://github.com/green-api/v1-whatsapp-api-client) 
 
 ## Installation
 
@@ -18,10 +20,15 @@ npm i @green-api/whatsapp-bot
 
 ### 1. Get green api account
 
-To use the WhatsApp Bot API, you first have to visit [green-api.com](https://green-api.com) and get free developer account. Green Api will give you id instance and api token, something like 
+To use the WhatsApp Bot API, you first have to visit [green-api.com](https://green-api.com) and get free developer account for API-V0. Green Api will give you id instance and api token, something like 
 ```
 ID_INSTANCE: "0000",
 API_TOKEN_INSTANCE: "000000000000000000AAAAAAAAAAAAAA"
+```
+
+If you want to get API-V1 protocol then you also have to visit [green-api.com](https://green-api.com) and choose Chat bot price option. Green API will take you a free trial period if you ask them. Access token looks like this:
+```
+token = 'gr.abcdefg...'
 ```
 
 ### 2. Add import
@@ -35,11 +42,17 @@ or using classic syntax:
 const WhatsAppBot = require('@green-api/whatsapp-bot')
 ```
 ### 3. Initiliaze new WhatsApp Bot with aquired account data
+
+For API-V0 protocol
 ```
 const bot = new WhatsAppBot({
     idInstance: "0000",
     apiTokenInstance: "000000000000000000AAAAAAAAAAAAAA"
 })
+```
+For API-V1 protocol
+```
+const bot = new WhatsAppBot(process.env.TOKEN_V1, {apiType: WhatsAppBot.GreenApiV1})
 ```
 
 ### 3. Start coding
@@ -74,7 +87,7 @@ bot.on('message', (ctx) => ctx.reply('Send /oldschool, /modern or /hipster to la
 bot.launch()
 ```
 
-There's some cool [examples too](docs/examples/).
+There's some cool V0-V1 api [examples too](docs/examples/).
 
 ## Documentation
 

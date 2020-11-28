@@ -115,7 +115,7 @@ export declare class WhatsAppBot<
    * @example
    * new WhatsAppBot(token, options)
    */
-  constructor(token: V0_Options, options?: TelegrafOptions)
+  constructor(token: V0_Options | string, options?: TelegrafOptions)
 
   /**
    * Launch bot in long-polling or webhook mode.

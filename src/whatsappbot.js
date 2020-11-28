@@ -1,6 +1,7 @@
 const debug = require('debug')('@green-api/whatsapp-bot:core')
 const Telegram = require('./telegram')
 const GreenApiV0 = require('./green-api-v0')
+const GreenApiV1 = require('./green-api-v1')
 const Extra = require('./extra')
 const Composer = require('./composer')
 const Markup = require('./markup')
@@ -220,6 +221,7 @@ module.exports = Object.assign(WhatsAppBot, {
   WhatsAppBot,
   Telegram,
   GreenApiV0,
+  GreenApiV1,
   Stage,
   BaseScene,
   session

@@ -23,7 +23,7 @@ WhatsApp options:
 
 ```js
 {
-  apiType: GreenApiV0    // Apply Green-API-V0 protocol to integrate with WhatsApp. This protocol is used by default
+  apiType: GreenApiV0 | GreenApiV1 // Apply Green-API-V0 or Green-API-V1 protocol to integrate with WhatsApp. The Green-API-V0 protocol is used by default
 }
 ```
 
@@ -39,7 +39,7 @@ Registers a middleware.
 
 ##### on
 
-Registers middleware for provided update type.
+Registers middleware for provided update type. Support next types: message, document, voice, document, photo, contact, location
 
 `whatsapp.on(updateTypes, ...middleware)`
 

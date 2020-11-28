@@ -1,24 +1,21 @@
 const replicators = require('./core/replicators')
 const ApiClient = require('./core/network/client')
-const whatsAppClient = require('@green-api/whatsapp-api-client')
+const WhatsAppApi = require('@green-api/v1-whatsapp-api-client')
 const ApiUtils = require('./api-utils')
 
-class GreenApiV0 extends ApiClient {
+class GreenApiV1 extends ApiClient {
 
   constructor(token, options, webhookResponse) {
     super(token, options, webhookResponse)
 
-    this.restAPI = whatsAppClient.restAPI({
-      idInstance: token.idInstance,
-      apiTokenInstance: token.apiTokenInstance,
-    })
+    this.api = new WhatsAppApi(token)
   }
   
   async getMe () {
     return new Promise((resolve) => { 
       resolve({
         is_bot: true,
-        username: 'whatsapp',
+        username: 'whatsapp_v1',
         /** true, if the bot can be invited to groups. Returned only in getMe. */
         can_join_groups: true,
         /** true, if privacy mode is disabled for the bot. Returned only in getMe. */
@@ -47,44 +44,31 @@ class GreenApiV0 extends ApiClient {
 
   async getUpdates (timeout, limit, offset, allowedUpdates) {
 
-    this.noty = await this.restAPI.webhookService.receiveNotification()
+    this.noty = await this.api.notifications.receiveNotification()
+
     if (!this.noty) {
       return []
     }
-    await this.deleteWebhook();
+    await this.api.notifications.deleteNotification(this.noty.receipt)
 
-    const incomingMsg = this.noty.body
-    if (incomingMsg.typeWebhook !== 'incomingMessageReceived') {
-      return []
-    }
-    
-    const text = (incomingMsg.messageData.typeMessage == 'textMessage' ? incomingMsg.messageData.textMessageData.textMessage : '')
-        || (incomingMsg.messageData.typeMessage == 'quotedMessage' ? incomingMsg.messageData.extendedTextMessageData.text : '')
-        || (incomingMsg.messageData.typeMessage == 'extendedTextMessage' ? incomingMsg.messageData.extendedTextMessageData.text : '')
-
-    const image = (incomingMsg.messageData.typeMessage == 'imageMessage' ? incomingMsg.messageData.fileMessageData: '') 
-    const voice = (incomingMsg.messageData.typeMessage == 'audioMessage' ? incomingMsg.messageData.fileMessageData: '') 
-    const document = (incomingMsg.messageData.typeMessage == 'documentMessage' ? incomingMsg.messageData.fileMessageData: '') 
-    const video = (incomingMsg.messageData.typeMessage == 'videoMessage' ? incomingMsg.messageData.fileMessageData: '') 
-    const location = (incomingMsg.messageData.typeMessage == 'locationMessage' ? incomingMsg.messageData.locationMessageData: '') 
-    const contacts = (incomingMsg.messageData.typeMessage == 'contactMessage' ? inboundMessage.messageData.contactMessageData: '') 
+    const inboundMessage = this.noty.notifications[0]
+    const text = (inboundMessage.messages[0].type == 'text' ? inboundMessage.messages[0].text.body !== null ? inboundMessage.messages[0].text.body : '' : '')
     
     const messageUpdate = {
       update_id: 1111,
       message: {
-          text: text,
           chat: {
-              id: incomingMsg.senderData.chatId,
+              id: inboundMessage.contacts[0].wa_id,
               type: 'channel',
           },
           from: {
-              first_name: incomingMsg.senderData.senderName,
+              first_name: inboundMessage.contacts[0].profile.name,
               last_name: '',
               id: 0,
               is_bot: false,
           },
-          message_id: incomingMsg.idMessage,
-          date: incomingMsg.timestamp,
+          message_id: inboundMessage.messages[0].id,
+          date: inboundMessage.messages[0].timestamp,
           caption_entities: [
               {
                   type: 'bot_command',
@@ -93,20 +77,30 @@ class GreenApiV0 extends ApiClient {
               }
           ]
       }
-    }
 
+    }
+    
+    const document = (inboundMessage.messages[0].type == 'document' ? inboundMessage.messages[0].document : '') 
+    const image = (inboundMessage.messages[0].type == 'image' ? inboundMessage.messages[0].image : '') 
+    const voice = (inboundMessage.messages[0].type == 'voice' ? inboundMessage.messages[0].voice : '') 
+    const contacts = (inboundMessage.messages[0].type == 'contacts' ? inboundMessage.messages[0].contacts : '') 
+    const location = (inboundMessage.messages[0].type == 'voice' ? inboundMessage.messages[0].location : '') 
+
+    if (text)
+      messageUpdate.message.text = text
+      
     if (document) {
       messageUpdate.message.document = {
-        file_id: document.downloadUrl,
-        file_name: document.caption,
-        //mime_type: document.mime_type,
+        file_id: document.id,
+        file_name: document.filename,
+        mime_type: document.mime_type,
       }
     }
 
     if (image) {
       messageUpdate.message.photo = [
         {
-          file_id: image.downloadUrl,
+          file_id: image.id,
           //width: 
           //height: number;
           //file_size?: number;
@@ -116,9 +110,9 @@ class GreenApiV0 extends ApiClient {
 
     if (voice) {
       messageUpdate.message.voice = {
-        file_id: voice.downloadUrl,
+        file_id: voice.id,
         //duration: number;
-        //mime_type: voice.mime_type,
+        mime_type: voice.mime_type,
         //file_size?: number;
       }
     }
@@ -126,7 +120,7 @@ class GreenApiV0 extends ApiClient {
     if (contacts) {
       messageUpdate.message.contact = {
       //phone_number: contacts;
-        first_name: displayName,
+      //first_name: string;
       //last_name?: string;
         user_id: contacts.vcard,
       }
@@ -134,23 +128,11 @@ class GreenApiV0 extends ApiClient {
 
     if (location) {
       messageUpdate.message.location = {
-        longitude: location.longitude,
-        latitude: location.latitude,
+        longitude: location.link,
+      //latitude: number;
       }
     }
-
-    if (video) {
-      messageUpdate.message.video = {
-        file_id: video.downloadUrl,
-        //width: number;
-        //height: number;
-        //duration: number;
-        //thumb?: PhotoSize;
-        //mime_type?: string;
-        //file_size?: number;
-      }
-    }
-
+    
     return [
         messageUpdate
     ]
@@ -198,7 +180,7 @@ class GreenApiV0 extends ApiClient {
 
   sendMessage (chatId, text, extra) {
     const textWithKeys = ApiUtils.keyEmulation(extra, text)
-    return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
+    return this.api.messages.sendTextMessage(chatId, textWithKeys)
   }
 
   forwardMessage (chatId, fromChatId, messageId, extra) {
@@ -238,34 +220,31 @@ class GreenApiV0 extends ApiClient {
   }
 
   sendContact (chatId, phoneNumber, firstName, extra) {
-    return this.restAPI.file.sendContact(chatId, null, {
-      phoneContact: phoneNumber,
-      firstName: firstName,
-    })
+    return this.callApi('sendContact', { chat_id: chatId, phone_number: phoneNumber, first_name: firstName, ...extra })
   }
 
-  sendPhoto (chatId, photo, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, photo, 'photo')
+  sendPhoto (phoneNumber, photo, extra) {
+    return this.api.messages.sendImageByLink(phoneNumber, photo)
   }
 
   sendDice (chatId, extra) {
     return this.callApi('sendDice', { chat_id: chatId, ...extra })
   }
 
-  sendDocument (chatId, document, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, document, 'document')
+  sendDocument (phoneNumber, document, extra) {
+    return this.api.messages.sendDocumentByLink(phoneNumber, document)
   }
 
-  sendAudio (chatId, audio, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, audio, 'video')
+  sendAudio (phoneNumber, audio, extra) {
+    return this.api.messages.sendAudioByLink(phoneNumber, audio)
   }
 
   sendSticker (chatId, sticker, extra) {
     return this.callApi('sendSticker', { chat_id: chatId, sticker, ...extra })
   }
 
-  sendVideo (chatId, video, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, video, 'video')
+  sendVideo (phoneNumber, video, extra) {
+    return this.api.messages.sendVideoByLink(phoneNumber, video)
   }
 
   sendAnimation (chatId, animation, extra) {
@@ -277,7 +256,7 @@ class GreenApiV0 extends ApiClient {
   }
 
   sendVoice (chatId, voice, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, voice, 'voice')
+    return this.callApi('sendVoice', { chat_id: chatId, voice, ...extra })
   }
 
   sendGame (chatId, gameName, extra) {
@@ -563,4 +542,4 @@ class GreenApiV0 extends ApiClient {
   }
 }
 
-module.exports = GreenApiV0
+module.exports = GreenApiV1
