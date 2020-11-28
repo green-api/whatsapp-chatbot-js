@@ -26,7 +26,7 @@ ID_INSTANCE: "0000",
 API_TOKEN_INSTANCE: "000000000000000000AAAAAAAAAAAAAA"
 ```
 
-If you want to get API-V1 protocol then you also have to visit [green-api.com](https://green-api.com) and choose Chat bot price option. Green API will take you a free trial period if you ask them. Access token looks like this:
+In case you want API-V1 protocol you also have to visit [green-api.com](https://green-api.com) and choose Chat bot price option. Green API will give you a free trial period if you ask them. Access token looks like this:
 ```
 token = 'gr.abcdefg...'
 ```
