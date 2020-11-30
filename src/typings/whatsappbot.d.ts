@@ -24,6 +24,7 @@ export interface TelegrafOptions {
    * Bot username
    */
   username?: string
+  apiType?: ApiClient
 }
 
 export interface LaunchPollingOptions {

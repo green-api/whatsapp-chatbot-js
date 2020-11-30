@@ -1,42 +1,36 @@
-const WhatsAppBot = require('@green-api/whatsapp-bot')
+import WhatsAppBot from '@green-api/whatsapp-bot'
+import {session, Stage, BaseScene as Scene, GreenApiV1} from '@green-api/whatsapp-bot'
 
-const session = WhatsAppBot.session
-const Stage = WhatsAppBot.Stage
-const Scene = WhatsAppBot.BaseScene
-const stage = new Stage()
-
-const bot = new WhatsAppBot(process.env.TOKEN_V1, {apiType: WhatsAppBot.GreenApiV1})
+const bot = new WhatsAppBot(process.env.TOKEN_V1 || '', {apiType: GreenApiV1})
 
 const getName = new Scene('getName')
-stage.register(getName)
 const getYear = new Scene('getYear')
-stage.register(getYear)
 const getEduc = new Scene('getEduc')
-stage.register(getEduc)
 const getNumber = new Scene('getNumber')
-stage.register(getNumber)
 const check = new Scene('check')
-stage.register(check)
+
+const stage = new Stage([getName, getYear, getEduc, getNumber, check], { ttl: 10 })
 
 bot.use(session())
+//@ts-ignore
 bot.use(stage.middleware())
 
-bot.hears(['1', '️Back to start'], (ctx) => {
+bot.hears(['1', '️Back to start'], (ctx : any) => {
   ctx.reply('Write your first and last name')
   ctx.scene.enter('getName')
 })
 
-bot.start((ctx) => {
+bot.start((ctx : any) => {
   ctx.reply('Write your first and last name')
   ctx.scene.enter('getName')
 })
 
-bot.on('message', (ctx) => {
+bot.on('message', (ctx : any) => {
   ctx.reply('Write your first and last name')
   ctx.scene.enter('getName')
 })
 
-getName.command('start', async (ctx) => {
+getName.command('start', async (ctx : any) => {
   ctx.reply(
     'Lets start from beginning. Write your first and last name',
     { reply_markup: { remove_keyboard: true } }
@@ -45,7 +39,7 @@ getName.command('start', async (ctx) => {
   ctx.scene.enter('getName')
 })
 
-getName.on('text', async (ctx) => {
+getName.on('text', async (ctx : any) => {
   if (ctx.message.text === '1') { //'1 Back'
     return ctx.reply('You are already at the beginning. Write your name')
   }
@@ -60,7 +54,7 @@ getName.on('text', async (ctx) => {
   ctx.scene.enter('getYear')
 })
 
-getYear.hears(/^[0-9]{4}$/, async (ctx) => {
+getYear.hears(/^[0-9]{4}$/, async (ctx : any) => {
   ctx.session.year = ctx.message.text
   ctx.reply(
     'Tell something about your education. Where did you graduated from?' +
@@ -72,21 +66,21 @@ getYear.hears(/^[0-9]{4}$/, async (ctx) => {
 })
 
 
-getYear.hears(['1', '1. Back'], async (ctx) => {
+getYear.hears(['1', '1. Back'], async (ctx : any) => {
     ctx.reply('Write your first and last name')
     await ctx.scene.leave('getYear')
     ctx.scene.enter('getName')
   }
 )
 
-getYear.hears(['2', '2. Delete all'], async (ctx) => {
+getYear.hears(['2', '2. Delete all'], async (ctx : any) => {
   ctx.reply('Lets start from beginning. Write your first and last name')
   await ctx.scene.leave('getYear')
   ctx.scene.enter('getName')
 }
 )
 
-getYear.on('text', async (ctx) => {
+getYear.on('text', async (ctx : any) => {
   ctx.reply(
     'Write a year only, for example  1990' +
     `\n\nYour info:\nName: ${ctx.session.name}`,
@@ -94,7 +88,7 @@ getYear.on('text', async (ctx) => {
   )
 })
 
-getEduc.hears(['1', '1. Back'], async (ctx) => {
+getEduc.hears(['1', '1. Back'], async (ctx : any) => {
     ctx.reply(
       'Write birth year' +
       `\n\nYour info:\nName: ${ctx.session.name}`,
@@ -104,13 +98,13 @@ getEduc.hears(['1', '1. Back'], async (ctx) => {
     ctx.scene.enter('getYear')
 })
 
-getEduc.hears(['2', '2. Delete all', '/start'], async (ctx) => {
+getEduc.hears(['2', '2. Delete all', '/start'], async (ctx : any) => {
     ctx.reply('Lets start from beginning. Write your first and last name')
     await ctx.scene.leave('getEduc')
     ctx.scene.enter('getName')
 })
 
-getEduc.on('text', async (ctx) => {
+getEduc.on('text', async (ctx : any) => {
   ctx.session.educ = ctx.message.text
   ctx.reply(
     'Print "Send contact" keyboard number to share your phone number.' +
@@ -122,7 +116,7 @@ getEduc.on('text', async (ctx) => {
 })
 
 
-getNumber.hears(['2', '2. Back'], async (ctx) => {
+getNumber.hears(['2', '2. Back'], async (ctx : any) => {
   ctx.reply(
     'Tell something about your education. Where did you graduated from?' +
     `\n\nYour info:\nName: ${ctx.session.name};\nBirth year: ${ctx.session.year}`,
@@ -132,14 +126,14 @@ getNumber.hears(['2', '2. Back'], async (ctx) => {
   ctx.scene.enter('getEduc')
 })
 
-getNumber.hears(['3', '3. Delete all', '/start'], async (ctx) => {
+getNumber.hears(['3', '3. Delete all', '/start'], async (ctx : any) => {
   ctx.reply('Lets start from beginning. Write your first and last name',     { reply_markup: { remove_keyboard: true } }   )
   await ctx.scene.leave('getNumber')
   ctx.scene.enter('getName')
   ctx.session = null
 })
 
-getNumber.hears(['1', '1. Send contact'], async (ctx) => {
+getNumber.hears(['1', '1. Send contact'], async (ctx : any) => {
   ctx.session.phone = ctx.message.chat.id.split('@')[0]
   ctx.reply(
     '❗️Revise your info and print keyboard for "Correct" key: ' + 
@@ -152,7 +146,7 @@ getNumber.hears(['1', '1. Send contact'], async (ctx) => {
 })
 
 
-check.hears(['1', '1 Correct'], (ctx) => {
+check.hears(['1', '1 Correct'], (ctx : any) => {
   ctx.reply('✅ Thanks! Your data has been accepted. We will call you.', { reply_markup: { keyboard: [['️1 - ⬅️Back to start']] } }
   )
   ctx.scene.leave('main')
@@ -163,7 +157,7 @@ check.hears(['1', '1 Correct'], (ctx) => {
   ctx.session = null
 })
 
-check.hears(['2', '2. Back'], async (ctx) => {
+check.hears(['2', '2. Back'], async (ctx : any) => {
   ctx.reply(
     'Print "Send contact" keyboard number to share your phone number.' +
     `\n\nYour info:\nName: ${ctx.session.name};\nBirth year: ${ctx.session.year};\nEducation: ${ctx.session.educ};` +
@@ -173,7 +167,7 @@ check.hears(['2', '2. Back'], async (ctx) => {
   ctx.scene.enter('getNumber')
 })
 
-check.hears(['3', '3. Delete all', '/start'], async (ctx) => {
+check.hears(['3', '3. Delete all', '/start'], async (ctx : any) => {
   ctx.reply('Lets start from beginning. Write your first and last name')
   await ctx.scene.leave('getNumber')
   ctx.scene.enter('getCompSkills')
