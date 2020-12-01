@@ -11,7 +11,7 @@ import * as tt from './telegram-types'
 
 import { TelegrafContext } from './context'
 import { Composer } from './composer'
-import { Telegram, TelegramOptions } from './telegram'
+import { Telegram, TelegramOptions, ApiClient } from './telegram'
 import {V0_Options} from './green-api-v0'
 
 export interface TelegrafOptions {
@@ -24,7 +24,7 @@ export interface TelegrafOptions {
    * Bot username
    */
   username?: string
-  apiType?: ApiClient
+  apiType?: any
 }
 
 export interface LaunchPollingOptions {

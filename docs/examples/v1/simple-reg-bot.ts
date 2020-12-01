@@ -9,7 +9,9 @@ const getEduc = new Scene('getEduc')
 const getNumber = new Scene('getNumber')
 const check = new Scene('check')
 
-const stage = new Stage([getName, getYear, getEduc, getNumber, check], { ttl: 10 })
+const stage = new Stage([getName, getYear, getEduc, getNumber, check])
+// If you want to restrict session living time then use ttl parameter
+//const stage = new Stage([getName, getYear, getEduc, getNumber, check], { ttl: 10 })
 
 bot.use(session())
 //@ts-ignore
