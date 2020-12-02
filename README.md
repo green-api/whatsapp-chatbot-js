@@ -87,7 +87,7 @@ bot.on('message', (ctx) => ctx.reply('Send /oldschool, /modern or /hipster to la
 bot.launch()
 ```
 
-There's some cool V0-V1 api [examples too](docs/examples/).
+There's some cool V0-V1 api [examples too](docs/examples/). The bots are great for running in docker containers. Take a look at dockerized [simple-reg-bot example](https://github.com/green-api/simple-reg-bot)
 
 ## Documentation
 
