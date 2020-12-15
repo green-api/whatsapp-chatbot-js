@@ -223,8 +223,8 @@ class GreenApiV1 extends ApiClient {
     return this.callApi('sendContact', { chat_id: chatId, phone_number: phoneNumber, first_name: firstName, ...extra })
   }
 
-  sendPhoto (phoneNumber, photo, extra) {
-    return this.api.messages.sendImageByLink(phoneNumber, photo)
+  sendPhoto (phoneNumber, photo, {caption}) {
+    return this.api.messages.sendImageByLink(phoneNumber, photo, caption)
   }
 
   sendDice (chatId, extra) {
