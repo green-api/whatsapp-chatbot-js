@@ -20,7 +20,7 @@
   "deprecated": false,
   "description": "WhatsApp Bot for NodeJs",
   "devDependencies": {
-    "@types/node": "^20.4.2",
+    "@types/node": "^20.4.4",
     "ava": "^5.3.1",
     "dotenv": "^16.3.1",
     "eslint": "^8.45.0",
