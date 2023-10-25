@@ -2,6 +2,8 @@ const replicators = require('./core/replicators')
 const ApiClient = require('./core/network/client')
 const whatsAppClient = require('@green-api/whatsapp-api-client')
 const ApiUtils = require('./api-utils')
+const FormData = require('form-data');
+
 
 class GreenApiV0 extends ApiClient {
 
@@ -293,8 +295,8 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendMediaGroup', { chat_id: chatId, media, ...extra })
   }
 
-  sendPoll (chatId, question, options, extra) {
-    return this.callApi('sendPoll', { chat_id: chatId, type: 'regular', question, options, ...extra })
+  sendPoll (chatId, message, options, multipleAnswers = false , quotedMessageId = null) {
+    return this.restAPI.message.sendPoll(chatId, message, options, multipleAnswers = false , quotedMessageId = null)
   }
 
   sendQuiz (chatId, question, options, extra) {
