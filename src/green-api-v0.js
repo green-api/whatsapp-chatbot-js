@@ -238,7 +238,7 @@ class GreenApiV0 extends ApiClient {
   }
 
   sendContact (chatId, phoneNumber, firstName, extra) {
-    return this.restAPI.file.sendContact(chatId, null, {
+    return this.restAPI.messages.sendContact(chatId, null, {
       phoneContact: phoneNumber,
       firstName: firstName,
     })
@@ -255,6 +255,11 @@ class GreenApiV0 extends ApiClient {
   sendDocument (chatId, document, extra) {
     return this.restAPI.file.sendFileByUrl(chatId, null, document, 'document')
   }
+
+  sendFileByUpload (document) {
+    return this.restAPI.file.sendFileByUpload(document)
+  }
+  
 
   sendAudio (chatId, audio, extra) {
     return this.restAPI.file.sendFileByUrl(chatId, null, audio, 'video')
