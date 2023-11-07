@@ -2,7 +2,6 @@ const replicators = require('./core/replicators')
 const ApiClient = require('./core/network/client')
 const whatsAppClient = require('@green-api/whatsapp-api-client')
 const ApiUtils = require('./api-utils')
-const FormData = require('form-data');
 
 
 class GreenApiV0 extends ApiClient {
@@ -203,6 +202,20 @@ class GreenApiV0 extends ApiClient {
     return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
   }
 
+  sendLink (chatId, text, extra) {
+    const textWithKeys = ApiUtils.keyEmulation(extra, text)
+    return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
+  }
+  }
+
+  sendTemplateButtons(chatId, message, footer = null, templateButtons) {
+    return this .restAPI.message.sendTemplateButtons(chatId, message, footer = null, templateButtons)
+  }
+
+  sendListMessage(chatId, message, buttonText, title, footer, sections) {
+    return this.restAPI.message.sendListMessage(chatId, message, buttonText, title, footer, sections)
+  }
+
   forwardMessage (chatId, fromChatId, messageId, extra) {
     return this.callApi('forwardMessage', {
       chat_id: chatId,
@@ -254,14 +267,17 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendDice', { chat_id: chatId, ...extra })
   }
 
-  sendDocument (chatId, document, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, document, 'document')
+  sendFileByUrl (chatId,urlFile, file_name, caption = '',quotedMessageId) {
+    return this.restAPI.file.sendFileByUrl(chatId,urlFile, file_name, caption = '',quotedMessageId)
   }
 
   sendFileByUpload (document) {
     return this.restAPI.file.sendFileByUpload(document)
   }
   
+  uploadFile(filePath) {
+    this.restAPI.file.uploadFile(filePath)
+  }
 
   sendAudio (chatId, audio, extra) {
     return this.restAPI.file.sendFileByUrl(chatId, null, audio, 'video')
@@ -295,8 +311,12 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendMediaGroup', { chat_id: chatId, media, ...extra })
   }
 
-  sendPoll (chatId, message, options, multipleAnswers = false , quotedMessageId = null) {
-    return this.restAPI.message.sendPoll(chatId, message, options, multipleAnswers = false , quotedMessageId = null)
+  sendPoll (chatId, message, options, multipleAnswers, quotedMessageId) {
+    return this.restAPI.message.sendPoll(chatId, message, options, multipleAnswers , quotedMessageId)
+  }
+
+  sendButtons (chatId, message, footer, buttons){
+    return this.restAPI.message.sendButtons(chatId, message, footer, buttons)
   }
 
   sendQuiz (chatId, question, options, extra) {
