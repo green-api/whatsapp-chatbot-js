@@ -206,10 +206,9 @@ class GreenApiV0 extends ApiClient {
     const textWithKeys = ApiUtils.keyEmulation(extra, text)
     return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
   }
-  }
 
-  sendTemplateButtons(chatId, message, footer = null, templateButtons) {
-    return this .restAPI.message.sendTemplateButtons(chatId, message, footer = null, templateButtons)
+  sendTemplateButtons(chatId, phone_number, message, footer = null, templateButtons) {
+    return this .restAPI.message.sendTemplateButtons(chatId, phone_number, message, footer = null, templateButtons)
   }
 
   sendListMessage(chatId, message, buttonText, title, footer, sections) {
