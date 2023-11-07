@@ -202,9 +202,8 @@ class GreenApiV0 extends ApiClient {
     return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
   }
 
-  sendLink (chatId, text, extra) {
-    const textWithKeys = ApiUtils.keyEmulation(extra, text)
-    return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
+  sendLink (chatId, message, quotedMessageId = null, linkPreview = null) {
+    return this.restAPI.message.sendMessage(chatId, message, quotedMessageId, linkPreview)
   }
 
   sendTemplateButtons(chatId, phone_number, message, footer = null, templateButtons) {
@@ -266,8 +265,8 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendDice', { chat_id: chatId, ...extra })
   }
 
-  sendFileByUrl (chatId,urlFile, file_name, caption = '',quotedMessageId) {
-    return this.restAPI.file.sendFileByUrl(chatId,urlFile, file_name, caption = '',quotedMessageId)
+  sendFileByUrl (chatId,urlFile, file_name, caption = '',quotedMessageId = null) {
+    return this.restAPI.file.sendFileByUrl(chatId,urlFile, file_name, caption,quotedMessageId)
   }
 
   sendFileByUpload (document) {
@@ -310,8 +309,8 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendMediaGroup', { chat_id: chatId, media, ...extra })
   }
 
-  sendPoll (chatId, message, options, multipleAnswers, quotedMessageId) {
-    return this.restAPI.message.sendPoll(chatId, message, options, multipleAnswers , quotedMessageId)
+  sendPoll (chatId, message, options, multipleAnswers = null, quotedMessageId = null) {
+    return this.restAPI.message.sendPoll(chatId, message, options, multipleAnswers, quotedMessageId)
   }
 
   sendButtons (chatId, message, footer, buttons){
