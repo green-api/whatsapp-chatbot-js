@@ -3,6 +3,7 @@ const ApiClient = require('./core/network/client')
 const whatsAppClient = require('@green-api/whatsapp-api-client')
 const ApiUtils = require('./api-utils')
 
+
 class GreenApiV0 extends ApiClient {
 
   constructor(token, options, webhookResponse) {
@@ -201,6 +202,18 @@ class GreenApiV0 extends ApiClient {
     return this.restAPI.message.sendMessage(chatId, null, textWithKeys)
   }
 
+  sendLink (chatId, message, quotedMessageId = null, linkPreview = null) {
+    return this.restAPI.message.sendMessage(chatId, message, quotedMessageId, linkPreview)
+  }
+
+  sendTemplateButtons(chatId, phone_number, message, footer = null, templateButtons) {
+    return this .restAPI.message.sendTemplateButtons(chatId, phone_number, message, footer = null, templateButtons)
+  }
+
+  sendListMessage(chatId, message, buttonText, title, footer, sections) {
+    return this.restAPI.message.sendListMessage(chatId, message, buttonText, title, footer, sections)
+  }
+
   forwardMessage (chatId, fromChatId, messageId, extra) {
     return this.callApi('forwardMessage', {
       chat_id: chatId,
@@ -238,7 +251,7 @@ class GreenApiV0 extends ApiClient {
   }
 
   sendContact (chatId, phoneNumber, firstName, extra) {
-    return this.restAPI.file.sendContact(chatId, null, {
+    return this.restAPI.messages.sendContact(chatId, null, {
       phoneContact: phoneNumber,
       firstName: firstName,
     })
@@ -252,8 +265,16 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendDice', { chat_id: chatId, ...extra })
   }
 
-  sendDocument (chatId, document, extra) {
-    return this.restAPI.file.sendFileByUrl(chatId, null, document, 'document')
+  sendFileByUrl (chatId,urlFile, file_name, caption = '',quotedMessageId = null) {
+    return this.restAPI.file.sendFileByUrl(chatId,urlFile, file_name, caption,quotedMessageId)
+  }
+
+  sendFileByUpload (document) {
+    return this.restAPI.file.sendFileByUpload(document)
+  }
+  
+  uploadFile(filePath) {
+    this.restAPI.file.uploadFile(filePath)
   }
 
   sendAudio (chatId, audio, extra) {
@@ -288,8 +309,12 @@ class GreenApiV0 extends ApiClient {
     return this.callApi('sendMediaGroup', { chat_id: chatId, media, ...extra })
   }
 
-  sendPoll (chatId, question, options, extra) {
-    return this.callApi('sendPoll', { chat_id: chatId, type: 'regular', question, options, ...extra })
+  sendPoll (chatId, message, options, multipleAnswers = null, quotedMessageId = null) {
+    return this.restAPI.message.sendPoll(chatId, message, options, multipleAnswers, quotedMessageId)
+  }
+
+  sendButtons (chatId, message, footer, buttons){
+    return this.restAPI.message.sendButtons(chatId, message, footer, buttons)
   }
 
   sendQuiz (chatId, question, options, extra) {
