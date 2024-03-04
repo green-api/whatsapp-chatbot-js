@@ -5,19 +5,19 @@ const bot = new WhatsAppBot({
     apiTokenInstance: process.env.API_TOKEN_INSTANCE
 })
 
-bot.on('message', (ctx, next) => {
+bot.on('text', (ctx, next) => {
     ctx.reply('Send - test or cat or dog')
     next()
 })
-bot.hears('hi', (ctx, next) => {
+bot.hears('test', (ctx, next) => {
     ctx.reply('You write "test"')
     next()
 })
-bot.hears('photo', (ctx, next) => {
+bot.hears('cat', (ctx, next) => {
     ctx.reply('You write "cat"')
     next()
 })
-bot.hears('contact', (ctx, next) => {
+bot.hears('dog', (ctx, next) => {
     ctx.reply('You write "dog"')
     next()
 })
