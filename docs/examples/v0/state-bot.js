@@ -5,8 +5,8 @@ const Stage = WhatsAppBot.Stage
 const Scene = WhatsAppBot.BaseScene
 
 const bot = new WhatsAppBot({
-    idInstance: "1101848922",
-    apiTokenInstance: "651450d7045842a58ca7bb62a1eb6e4b09426645ae574fdfaf"
+    idInstance: process.env.ID_INSTANCE,
+    apiTokenInstance: process.env.API_TOKEN_INSTANCE
 })
 
 const loginScene = new Scene("loginScene")
