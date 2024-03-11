@@ -43,7 +43,8 @@ const MessageSubTypes = [
   'connected_website',
   'passport_data',
   'poll',
-  'forward_date'
+  'forward_date',
+  'poll_update'
 ]
 
 const MessageSubTypesMapping = {
@@ -56,6 +57,7 @@ class TelegrafContext {
     this.update = update
     this.options = options
     this.updateType = UpdateTypes.find((key) => key in this.update)
+
     if (this.updateType === 'message' || (this.options.channelMode && this.updateType === 'channel_post')) {
       this.updateSubTypes = MessageSubTypes
         .filter((key) => key in this.update[this.updateType])
@@ -63,6 +65,7 @@ class TelegrafContext {
     } else {
       this.updateSubTypes = []
     }
+
     Object.getOwnPropertyNames(TelegrafContext.prototype)
       .filter((key) => key !== 'constructor' && typeof this[key] === 'function')
       .forEach((key) => (this[key] = this[key].bind(this)))

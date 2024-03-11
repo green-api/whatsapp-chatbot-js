@@ -62,7 +62,8 @@ export type MessageSubTypes =
   'audio' |
   'passport_data' |
   'connected_website' |
-  'animation'
+  'animation' |
+  'poll_update'
 
 export type InlineQueryResult =
   TT.InlineQueryResultCachedAudio |
@@ -548,6 +549,7 @@ export interface ExtraStopPoll {
   reply_markup?: TT.InlineKeyboardMarkup
 }
 
+// @ts-ignore
 export interface IncomingMessage extends TT.Message {
   audio?: TT.Audio
   entities?: TT.MessageEntity[]
@@ -612,6 +614,7 @@ export interface MessageVoice extends TT.Message {
   voice: TT.Voice
 }
 
+// @ts-ignore
 export interface MessageDice extends TT.Message {
   dice: Dice
 }
