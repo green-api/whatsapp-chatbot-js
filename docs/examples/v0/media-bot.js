@@ -29,4 +29,8 @@ bot.on('voice', (ctx, next) => {
     ctx.reply('Hello voice!')
     next()
 })
+bot.on('pollUpdate', (ctx, next) => {
+    ctx.reply('Hello poll update!')
+    next()
+})
 bot.launch()

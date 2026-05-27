@@ -15,8 +15,10 @@ class GreenApiV0 extends ApiClient {
   }
   
   async getMe () {
-    return new Promise((resolve) => { 
+    let settings = await this.restAPI.settings.getSettings();
+    return new Promise((resolve) => {
       resolve({
+        id: settings.wid,
         is_bot: true,
         username: 'whatsapp',
         /** true, if the bot can be invited to groups. Returned only in getMe. */
@@ -51,7 +53,7 @@ class GreenApiV0 extends ApiClient {
     if (!this.noty) {
       return []
     }
-    await this.deleteWebhook();
+    await this.deleteWebhook()
 
     const incomingMsg = this.noty.body
     if (incomingMsg.typeWebhook !== 'incomingMessageReceived') {
@@ -67,8 +69,9 @@ class GreenApiV0 extends ApiClient {
     const document = (incomingMsg.messageData.typeMessage == 'documentMessage' ? incomingMsg.messageData.fileMessageData: '') 
     const video = (incomingMsg.messageData.typeMessage == 'videoMessage' ? incomingMsg.messageData.fileMessageData: '') 
     const location = (incomingMsg.messageData.typeMessage == 'locationMessage' ? incomingMsg.messageData.locationMessageData: '') 
-    const contacts = (incomingMsg.messageData.typeMessage == 'contactMessage' ? inboundMessage.messageData.contactMessageData: '') 
-    
+    const contacts = (incomingMsg.messageData.typeMessage == 'contactMessage' ? incomingMsg.messageData.contactMessageData: '')
+    const poll_update = (incomingMsg.messageData.typeMessage == 'pollUpdateMessage' ? incomingMsg.messageData.pollMessageData: '')
+
     const messageUpdate = {
       update_id: 1111,
       message: {
@@ -80,7 +83,7 @@ class GreenApiV0 extends ApiClient {
           from: {
               first_name: incomingMsg.senderData.senderName,
               last_name: '',
-              id: 0,
+              id: incomingMsg.senderData.sender,
               is_bot: false,
           },
           message_id: incomingMsg.idMessage,
@@ -148,6 +151,15 @@ class GreenApiV0 extends ApiClient {
         //thumb?: PhotoSize;
         //mime_type?: string;
         //file_size?: number;
+      }
+    }
+
+    if (poll_update) {
+      messageUpdate.message.poll_update = {
+        stanzaId: poll_update.stanzaId,
+        name: poll_update.name,
+        votes: poll_update.votes,
+        multipleAnswers: poll_update.multipleAnswers,
       }
     }
 

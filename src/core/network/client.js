@@ -1,6 +1,6 @@
 const debug = require('debug')('@green-api/whatsapp-bot:client')
 const crypto = require('crypto')
-const fetch = require('node-fetch').default
+const fetch = import('node-fetch').then(module => module.default);
 const fs = require('fs')
 const https = require('https')
 const path = require('path')
