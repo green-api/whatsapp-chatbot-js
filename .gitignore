@@ -3,7 +3,7 @@ node_modules
 lib
 
 .*
-!/.gitignor
+!/.gitignore
 env
 examples/credentials.js
 
