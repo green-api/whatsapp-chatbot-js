@@ -41,6 +41,17 @@ or using classic syntax:
 ```
 const WhatsAppBot = require('@green-api/whatsapp-bot')
 ```
+
+## 2.5 Setup
+
+Before launching the bot you should enable incoming notifications in instance settings by using <a href="https://green-api.com/en/docs/api/account/SetSettings/">SetSettings method</a>.
+
+```json
+"incomingWebhook": "yes",
+"outgoingMessageWebhook": "yes",
+"outgoingAPIMessageWebhook": "yes",
+```
+
 ### 3. Initiliaze new WhatsApp Bot with aquired account data
 
 For API-V0 protocol
